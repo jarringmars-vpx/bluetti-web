@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101820">
+  <title>BLUETTI Web</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">BLUETTI Web</div>
+        <h1 id="model">EL30V2</h1>
+      </div>
+      <div class="status" id="status">Connecting…</div>
+    </header>
+
+    <section class="hero card">
+      <div class="soc" id="soc">--%</div>
+      <div class="subtle">State of Charge</div>
+      <div class="progress"><div id="socBar"></div></div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>AC</h2>
+        <div class="row"><span>Input</span><strong id="acInput">-- W</strong></div>
+        <div class="row"><span>Output</span><strong id="acOutput">-- W</strong></div>
+        <button id="acBtn" class="toggle" onclick="toggleAC()">AC OFF</button>
+      </div>
+
+      <div class="card">
+        <h2>DC</h2>
+        <div class="row"><span>PV/DC Input</span><strong id="dcInput">-- W</strong></div>
+        <div class="row"><span>Output</span><strong id="dcOutput">-- W</strong></div>
+        <button id="dcBtn" class="toggle" onclick="toggleDC()">DC OFF</button>
+      </div>
+
+      <div class="card">
+        <h2>Battery</h2>
+        <div class="row"><span>Voltage</span><strong id="batteryVoltage">-- V</strong></div>
+        <div class="row"><span>Current</span><strong id="batteryCurrent">-- A</strong></div>
+        <div class="row"><span>State</span><strong id="batteryState">--</strong></div>
+        <div class="row"><span>PV Generation</span><strong id="pvGeneration">-- kWh</strong></div>
+      </div>
+
+      <div class="card">
+        <h2>Temperature</h2>
+        <div class="big-value" id="temperature">-- °F</div>
+      </div>
+
+      <div class="card mode-card">
+        <h2>Charging Mode</h2>
+        <div class="mode-buttons">
+          <button onclick="setMode('standard')">Standard</button>
+          <button onclick="setMode('silent')">Silent</button>
+          <button onclick="setMode('turbo')">Turbo</button>
+        </div>
+        <div class="subtle mode-current">Current: <strong id="chargingMode">--</strong></div>
+      </div>
+    </section>
+
+    <footer>Local prototype v0.1.0 · Mock backend</footer>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
