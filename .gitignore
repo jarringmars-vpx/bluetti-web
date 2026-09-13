@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+.venv/
+venv/
+env/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs / runtime output
+*.log
+logs/
+
+# Local configuration / secrets
+.env
+.env.*
+!.env.example
+secrets/
+private/
+
+# BLUETTI private/authentication material
+*.csv
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+
+# Temporary / backup files
+*.bak
+*.tmp
+*~
