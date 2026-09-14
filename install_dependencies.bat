@@ -1,3 +1,4 @@
 @echo off
-C:\Python310\python.exe -m pip install fastapi uvicorn[standard]
+cd /d %~dp0
+C:\Python310\python.exe -m pip install -r requirements.txt
 pause

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#101820">
   <title>BLUETTI Web</title>
-  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%2300a8e8%22/%3E%3Ctext x=%2232%22 y=%2243%22 font-size=%2234%22 text-anchor=%22middle%22 font-family=%22Arial,sans-serif%22 font-weight=%22700%22 fill=%22white%22%3EB%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/static/styles.css?v=0.2.12">
 </head>
 <body>
   <main class="shell">
@@ -14,13 +15,54 @@
         <div class="eyebrow">BLUETTI Web</div>
         <h1 id="model">EL30V2</h1>
       </div>
-      <div class="status" id="status">Connecting…</div>
+      <div class="header-actions">
+        <div class="status-stack">
+          <div class="status" id="status">Connecting…</div>
+          <div class="error" id="error"></div>
+        </div>
+        <div class="topbar-buttons">
+          <button class="header-btn" type="button" onclick="openSettings()" aria-label="Open settings">
+            ⚙ <span>Settings</span>
+          </button>
+          <button class="header-btn" type="button" onclick="refreshApp()" aria-label="Refresh BLUETTI Web">
+            ↻ <span>Refresh</span>
+          </button>
+        </div>
+      </div>
     </header>
+
+    <section class="device-card card">
+      <div class="device-visual">
+        <img class="device-image" src="/static/images/EL30V2.png" alt="BLUETTI Elite 30 V2">
+
+        <div class="lcd-value lcd-input" id="imageInputWatts">--</div>
+        <div class="lcd-value lcd-soc" id="imageSoc"><span id="imageSocValue">--</span><span class="lcd-percent">%</span></div>
+        <div class="lcd-value lcd-output" id="imageOutputWatts">--</div>
+
+        <button id="imageDcBtn" class="image-control image-control-dc" type="button"
+                onclick="toggleDC()" aria-label="Toggle DC output from device image">
+          <span class="image-control-glow"></span>
+        </button>
+        <button id="imageAcBtn" class="image-control image-control-ac" type="button"
+                onclick="toggleAC()" aria-label="Toggle AC output from device image">
+          <span class="image-control-glow"></span>
+        </button>
+      </div>
+      <div class="device-hint">Tap the DC or AC button on the device image to toggle that output.</div>
+    </section>
 
     <section class="hero card">
       <div class="soc" id="soc">--%</div>
       <div class="subtle">State of Charge</div>
+      <div class="time-remaining-block">
+        <div class="time-remaining-value" id="timeRemaining">--</div>
+        <div class="subtle time-remaining-label" id="timeRemainingLabel">Time Remaining</div>
+      </div>
       <div class="progress"><div id="socBar"></div></div>
+      <div class="health-row">
+        <span id="fault">Fault status unavailable</span>
+        <span id="fan">Fan --</span>
+      </div>
     </section>
 
     <section class="grid">
@@ -54,16 +96,52 @@
       <div class="card mode-card">
         <h2>Charging Mode</h2>
         <div class="mode-buttons">
-          <button onclick="setMode('standard')">Standard</button>
-          <button onclick="setMode('silent')">Silent</button>
-          <button onclick="setMode('turbo')">Turbo</button>
+          <button id="modeSilent" onclick="setMode('silent')">Silent</button>
+          <button id="modeStandard" onclick="setMode('standard')">Standard</button>
+          <button id="modeTurbo" onclick="setMode('turbo')">Turbo</button>
         </div>
         <div class="subtle mode-current">Current: <strong id="chargingMode">--</strong></div>
       </div>
     </section>
 
-    <footer>Local prototype v0.1.0 · Mock backend</footer>
+    <footer id="footer">Local BLUETTI Web · Community BLE backend</footer>
   </main>
-  <script src="/static/app.js"></script>
+
+  <div class="settings-backdrop" id="settingsBackdrop" hidden onclick="closeSettingsFromBackdrop(event)">
+    <section class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="settings-header">
+        <div>
+          <div class="eyebrow">BLUETTI Web</div>
+          <h2 id="settingsTitle">Settings</h2>
+        </div>
+        <button class="settings-close" type="button" onclick="closeSettings()" aria-label="Close settings">×</button>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-label">Temperature Display</div>
+        <div class="settings-description">Choose how temperature is shown on this browser.</div>
+        <div class="setting-options" role="group" aria-label="Temperature display units">
+          <button id="tempUnitF" type="button" onclick="setTemperaturePreference('F')">°F</button>
+          <button id="tempUnitC" type="button" onclick="setTemperaturePreference('C')">°C</button>
+          <button id="tempUnitBoth" type="button" onclick="setTemperaturePreference('Both')">Both</button>
+        </div>
+      </div>
+
+      <div class="settings-group settings-group-spaced">
+        <div class="settings-label">Time Remaining Calculation</div>
+        <div class="settings-description">
+          Instantaneous reacts immediately. Averaged uses a rolling 30-second battery-power average for a steadier estimate.
+        </div>
+        <div class="setting-options setting-options-two" role="group" aria-label="Time remaining calculation">
+          <button id="runtimeInstant" type="button" onclick="setRuntimePreference('Instantaneous')">Instantaneous</button>
+          <button id="runtimeAverage" type="button" onclick="setRuntimePreference('Averaged')">Averaged</button>
+        </div>
+      </div>
+
+      <div class="settings-note">These preferences are saved locally on this device.</div>
+    </section>
+  </div>
+
+  <script src="/static/app.js?v=0.2.12"></script>
 </body>
 </html>
